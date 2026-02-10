@@ -4,12 +4,16 @@ import { collection, getDocs, query, where, orderBy } from "firebase/firestore";
 import * as XLSX from "xlsx";
 import jsPDF from "jspdf";
 import "jspdf-autotable";
+import { useNavigate } from 'react-router-dom';
 
 export default function Export() {
   const [records, setRecords] = useState([]);
   const [loading, setLoading] = useState(false);
   const [fromDate, setFromDate] = useState("");
   const [toDate, setToDate] = useState("");
+  
+  // Initialize the navigate function
+  const navigate = useNavigate();
 
   const loadAttendance = async () => {
     if (!fromDate || !toDate) {
@@ -142,7 +146,7 @@ export default function Export() {
             {records.map((r) => (
               <tr key={r.id}>
                 <td>{r.date}</td>
-                <td>{r.teacherName || r.userId}</td>
+                <td>{r.userName || r.userId || "Unknown"}</td>
                 <td>{r.inTime || "-"}</td>
                 <td>{r.outTime || "-"}</td>
                 <td>{r.status || "-"}</td>
