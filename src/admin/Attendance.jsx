@@ -10,8 +10,10 @@ import {
   addDoc,
   serverTimestamp,
 } from "firebase/firestore";
+import { useNavigate } from "react-router-dom";
 
 export default function AdminAttendance() {
+  const navigate = useNavigate();
   const [records, setRecords] = useState([]);
   const [loading, setLoading] = useState(true);
 
@@ -70,7 +72,13 @@ export default function AdminAttendance() {
   }
 
   return (
-    <div style={{ maxWidth: 1100, margin: "40px auto" }}>
+    <div style={{ maxWidth: 1100, margin: "40px auto", padding: "0 20px" }}>
+      <button 
+        onClick={() => navigate(-1)} 
+        style={{ marginBottom: 20, padding: "8px 16px", cursor: "pointer", borderRadius: 4, border: "1px solid #ccc", background: "#f9f9f9" }}
+      >
+        ← Back
+      </button>
       <h2 style={{ textAlign: "center" }}>Attendance Records</h2>
 
       {records.length === 0 ? (
@@ -84,6 +92,7 @@ export default function AdminAttendance() {
               width: "100%",
               borderCollapse: "collapse",
               marginTop: 20,
+              boxShadow: "0 2px 5px rgba(0,0,0,0.1)"
             }}
           >
             <thead style={{ background: "#f4f4f4" }}>
@@ -102,16 +111,16 @@ export default function AdminAttendance() {
             <tbody>
               {records.map((r) => (
                 <tr key={r.id}>
-                  <td>{r.date}</td>
-                  <td>{r.userName || r.userId}</td>
+                  <td style={{ textAlign: "center" }}>{r.date}</td>
+                  <td style={{ textAlign: "center" }}>{r.userName || r.userId}</td>
 
-                  <td>{r.inTime?.toDate ? r.inTime.toDate().toLocaleTimeString() : (r.inTime || "-")}</td>
-                  <td>{r.outTime?.toDate ? r.outTime.toDate().toLocaleTimeString() : (r.outTime || "-")}</td>
+                  <td style={{ textAlign: "center" }}>{r.inTime?.toDate ? r.inTime.toDate().toLocaleTimeString() : (r.inTime || "-")}</td>
+                  <td style={{ textAlign: "center" }}>{r.outTime?.toDate ? r.outTime.toDate().toLocaleTimeString() : (r.outTime || "-")}</td>
 
-                  <td>{r.status}</td>
-                  <td>{r.lateReason || "-"}</td>
-                  <td>{r.inLocation ? `${r.inLocation.distance.toFixed(0)}m` : "-"}</td>
-                  <td>{r.outLocation ? `${r.outLocation.distance.toFixed(0)}m` : "-"}</td>
+                  <td style={{ textAlign: "center" }}>{r.status}</td>
+                  <td style={{ textAlign: "center" }}>{r.lateReason || "-"}</td>
+                  <td style={{ textAlign: "center" }}>{r.inLocation ? `${r.inLocation.distance.toFixed(0)}m` : "-"}</td>
+                  <td style={{ textAlign: "center" }}>{r.outLocation ? `${r.outLocation.distance.toFixed(0)}m` : "-"}</td>
                 </tr>
               ))}
             </tbody>

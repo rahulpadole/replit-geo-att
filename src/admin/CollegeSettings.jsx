@@ -1,8 +1,10 @@
 import { useState, useEffect } from "react";
 import { doc, getDoc, setDoc } from "firebase/firestore";
 import { db } from "../services/firebase";
+import { useNavigate } from "react-router-dom";
 
 export default function CollegeSettings() {
+  const navigate = useNavigate();
   const [lat, setLat] = useState("");
   const [lng, setLng] = useState("");
   const [radius, setRadius] = useState(150); // meters
@@ -74,46 +76,58 @@ export default function CollegeSettings() {
   };
 
   return (
-    <div style={{ maxWidth: 420, margin: "30px auto" }}>
+    <div style={{ maxWidth: 420, margin: "30px auto", padding: "0 20px" }}>
+      <button 
+        onClick={() => navigate(-1)} 
+        style={{ marginBottom: 20, padding: "8px 16px", cursor: "pointer", borderRadius: 4, border: "1px solid #ccc", background: "#f9f9f9" }}
+      >
+        ← Back
+      </button>
       <h2>College Settings</h2>
 
-      <label>Latitude</label>
-      <input
-        type="number"
-        step="0.000001"
-        value={lat}
-        onChange={(e) => setLat(e.target.value)}
-        placeholder="Enter latitude"
-        style={{ width: "100%", padding: 8, marginBottom: 10 }}
-      />
+      <div style={{ marginBottom: 12 }}>
+        <label style={{ display: "block", marginBottom: 4 }}>Latitude</label>
+        <input
+          type="number"
+          step="0.000001"
+          value={lat}
+          onChange={(e) => setLat(e.target.value)}
+          placeholder="Enter latitude"
+          style={{ width: "100%", padding: 8, boxSizing: "border-box" }}
+        />
+      </div>
 
-      <label>Longitude</label>
-      <input
-        type="number"
-        step="0.000001"
-        value={lng}
-        onChange={(e) => setLng(e.target.value)}
-        placeholder="Enter longitude"
-        style={{ width: "100%", padding: 8, marginBottom: 10 }}
-      />
+      <div style={{ marginBottom: 12 }}>
+        <label style={{ display: "block", marginBottom: 4 }}>Longitude</label>
+        <input
+          type="number"
+          step="0.000001"
+          value={lng}
+          onChange={(e) => setLng(e.target.value)}
+          placeholder="Enter longitude"
+          style={{ width: "100%", padding: 8, boxSizing: "border-box" }}
+        />
+      </div>
 
-      <label>Allowed Radius (meters)</label>
-      <input
-        type="number"
-        value={radius}
-        onChange={(e) => setRadius(e.target.value)}
-        style={{ width: "100%", padding: 8, marginBottom: 15 }}
-      />
+      <div style={{ marginBottom: 15 }}>
+        <label style={{ display: "block", marginBottom: 4 }}>Allowed Radius (meters)</label>
+        <input
+          type="number"
+          value={radius}
+          onChange={(e) => setRadius(e.target.value)}
+          style={{ width: "100%", padding: 8, boxSizing: "border-box" }}
+        />
+      </div>
 
-      <button onClick={useCurrentLocation} style={{ width: "100%", marginBottom: 10 }}>
+      <button onClick={useCurrentLocation} style={{ width: "100%", marginBottom: 10, padding: 10, cursor: "pointer" }}>
         📍 Use Current Location
       </button>
 
-      <button onClick={saveSettings} disabled={loading} style={{ width: "100%" }}>
+      <button onClick={saveSettings} disabled={loading} style={{ width: "100%", padding: 10, cursor: "pointer", backgroundColor: "#1976d2", color: "#fff", border: "none", borderRadius: 4 }}>
         {loading ? "Saving..." : "Save Settings"}
       </button>
 
-      {status && <p style={{ marginTop: 10 }}>{status}</p>}
+      {status && <p style={{ marginTop: 10, textAlign: "center" }}>{status}</p>}
     </div>
   );
 }

@@ -83,7 +83,13 @@ export default function TeacherForm() {
   };
 
   return (
-    <div style={{ maxWidth: 420, margin: "30px auto" }}>
+    <div style={{ maxWidth: 420, margin: "30px auto", padding: "0 20px" }}>
+      <button 
+        onClick={() => navigate(-1)} 
+        style={{ marginBottom: 20, padding: "8px 16px", cursor: "pointer", borderRadius: 4, border: "1px solid #ccc", background: "#f9f9f9" }}
+      >
+        ← Back
+      </button>
       <h2>{id ? "Edit Teacher" : "Add Teacher"}</h2>
 
       <div style={{ marginBottom: 12 }}>

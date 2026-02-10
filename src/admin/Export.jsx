@@ -84,8 +84,14 @@ export default function Export() {
   };
 
   return (
-    <div style={{ maxWidth: 900, margin: "30px auto" }}>
-      <h2>Export Attendance</h2>
+    <div style={{ maxWidth: 1000, margin: "30px auto", padding: "0 20px" }}>
+      <button 
+        onClick={() => navigate(-1)} 
+        style={{ marginBottom: 20, padding: "8px 16px", cursor: "pointer", borderRadius: 4, border: "1px solid #ccc", background: "#f9f9f9" }}
+      >
+        ← Back
+      </button>
+      <h2 style={{ textAlign: "center" }}>Export Attendance</h2>
 
       <div style={{ marginBottom: 15 }}>
         <label>

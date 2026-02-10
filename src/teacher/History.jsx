@@ -8,8 +8,10 @@ import {
   limit,
 } from "firebase/firestore";
 import { auth, db } from "../services/firebase";
+import { useNavigate } from "react-router-dom";
 
 export default function History() {
+  const navigate = useNavigate();
   const [records, setRecords] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
@@ -39,15 +41,16 @@ export default function History() {
 
         const data = snap.docs.map((doc) => {
           const d = doc.data();
+          let formattedDate = d.date || "-";
+          if (d.timestamp && typeof d.timestamp.toDate === "function") {
+             formattedDate = d.timestamp.toDate().toISOString().split("T")[0];
+          }
+
           return {
             id: doc.id,
-            date:
-              d.date ||
-              (d.timestamp
-                ? d.timestamp.toDate().toISOString().split("T")[0]
-                : "-"),
-            inTime: d.inTime || "-",
-            outTime: d.outTime || "-",
+            date: formattedDate,
+            inTime: d.inTime?.toDate ? d.inTime.toDate().toLocaleTimeString() : (d.inTime || "-"),
+            outTime: d.outTime?.toDate ? d.outTime.toDate().toLocaleTimeString() : (d.outTime || "-"),
             status: d.status || "-",
             lateReason: d.lateReason || "-",
           };
@@ -79,6 +82,12 @@ export default function History() {
 
   return (
     <div style={{ maxWidth: 900, margin: "30px auto", padding: 20 }}>
+      <button 
+        onClick={() => navigate(-1)} 
+        style={{ marginBottom: 20, padding: "8px 16px", cursor: "pointer", borderRadius: 4, border: "1px solid #ccc", background: "#f9f9f9" }}
+      >
+        ← Back
+      </button>
       <h2 style={{ textAlign: "center" }}>
         Attendance History (Last 40 Records)
       </h2>
@@ -95,21 +104,21 @@ export default function History() {
         >
           <thead>
             <tr style={{ backgroundColor: "#f2f2f2" }}>
-              <th>Date</th>
-              <th>In Time</th>
-              <th>Out Time</th>
-              <th>Status</th>
-              <th>Late Reason</th>
+              <th style={{ padding: 10, border: "1px solid #ddd" }}>Date</th>
+              <th style={{ padding: 10, border: "1px solid #ddd" }}>In Time</th>
+              <th style={{ padding: 10, border: "1px solid #ddd" }}>Out Time</th>
+              <th style={{ padding: 10, border: "1px solid #ddd" }}>Status</th>
+              <th style={{ padding: 10, border: "1px solid #ddd" }}>Late Reason</th>
             </tr>
           </thead>
           <tbody>
             {records.map((r) => (
               <tr key={r.id} style={{ borderBottom: "1px solid #ddd" }}>
-                <td>{r.date}</td>
-                <td>{r.inTime}</td>
-                <td>{r.outTime}</td>
-                <td>{r.status}</td>
-                <td>{r.lateReason}</td>
+                <td style={{ padding: 10, border: "1px solid #ddd", textAlign: "center" }}>{r.date}</td>
+                <td style={{ padding: 10, border: "1px solid #ddd", textAlign: "center" }}>{r.inTime}</td>
+                <td style={{ padding: 10, border: "1px solid #ddd", textAlign: "center" }}>{r.outTime}</td>
+                <td style={{ padding: 10, border: "1px solid #ddd", textAlign: "center" }}>{r.status}</td>
+                <td style={{ padding: 10, border: "1px solid #ddd", textAlign: "center" }}>{r.lateReason}</td>
               </tr>
             ))}
           </tbody>

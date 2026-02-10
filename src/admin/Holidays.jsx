@@ -1,8 +1,10 @@
 import { useState, useEffect } from "react";
 import { db } from "../services/firebase";
 import { collection, addDoc, getDocs, deleteDoc, doc, query, orderBy } from "firebase/firestore";
+import { useNavigate } from "react-router-dom";
 
 export default function Holidays() {
+  const navigate = useNavigate();
   const [holidays, setHolidays] = useState([]);
   const [name, setName] = useState("");
   const [date, setDate] = useState("");
@@ -43,8 +45,14 @@ export default function Holidays() {
   };
 
   return (
-    <div style={{ maxWidth: 600, margin: "30px auto", padding: 20 }}>
-      <h2>Manage Holidays & Special Events</h2>
+    <div style={{ maxWidth: 800, margin: "30px auto", padding: "0 20px" }}>
+      <button 
+        onClick={() => navigate(-1)} 
+        style={{ marginBottom: 20, padding: "8px 16px", cursor: "pointer", borderRadius: 4, border: "1px solid #ccc", background: "#f9f9f9" }}
+      >
+        ← Back
+      </button>
+      <h2 style={{ textAlign: "center" }}>Manage Holidays & Special Events</h2>
       <form onSubmit={addHoliday} style={{ marginBottom: 30 }}>
         <div style={{ marginBottom: 10 }}>
           <label>Event Name:</label>

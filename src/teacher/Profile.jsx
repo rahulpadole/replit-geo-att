@@ -2,8 +2,10 @@ import { useEffect, useState } from "react";
 import { auth, db } from "../services/firebase";
 import { doc, getDoc, updateDoc } from "firebase/firestore";
 import { signOut, deleteUser } from "firebase/auth";
+import { useNavigate } from "react-router-dom";
 
 export default function TeacherProfile() {
+  const navigate = useNavigate();
   const [user, setUser] = useState(null);
   const [contact, setContact] = useState("");
   const [loading, setLoading] = useState(false);
@@ -49,7 +51,7 @@ export default function TeacherProfile() {
     try {
       setLoading(true);
       await signOut(auth);
-      window.location.href = "/login";
+      navigate("/login");
     } catch (err) {
       console.error(err);
       alert("Failed to logout: " + err.message);
@@ -64,7 +66,7 @@ export default function TeacherProfile() {
       setLoading(true);
       await deleteUser(auth.currentUser);
       alert("✅ Account deleted");
-      window.location.href = "/login";
+      navigate("/login");
     } catch (err) {
       console.error(err);
       alert("❌ Failed to delete account: " + err.message);
@@ -73,34 +75,60 @@ export default function TeacherProfile() {
     }
   };
 
-  if (loading && !user) return <p>Loading profile...</p>;
-  if (!user) return <p>User not found</p>;
+  if (loading && !user) return <p style={{ textAlign: "center", marginTop: 40 }}>Loading profile...</p>;
+  if (!user) return <p style={{ textAlign: "center", marginTop: 40 }}>User not found</p>;
 
   return (
-    <div style={{ maxWidth: 500, margin: "20px auto", padding: 20, border: "1px solid #ccc", borderRadius: 8 }}>
-      <h2>My Profile</h2>
-      <p><b>Name:</b> {user.name}</p>
-      <p><b>Email:</b> {user.email}</p>
-      <p><b>Department:</b> {user.department}</p>
-      <p><b>Position:</b> {user.position || "-"}</p>
+    <div style={{ maxWidth: 500, margin: "40px auto", padding: "0 20px" }}>
+      <button 
+        onClick={() => navigate(-1)} 
+        style={{ marginBottom: 20, padding: "8px 16px", cursor: "pointer", borderRadius: 4, border: "1px solid #ccc", background: "#f9f9f9" }}
+      >
+        ← Back
+      </button>
+      <div style={{ border: "1px solid #ddd", padding: 30, borderRadius: 12, boxShadow: "0 4px 10px rgba(0,0,0,0.1)", background: "#fff" }}>
+        <h2 style={{ textAlign: "center", marginBottom: 20 }}>My Profile</h2>
+        <div style={{ marginBottom: 15 }}>
+          <p><b>Name:</b> {user.name}</p>
+          <p><b>Email:</b> {user.email || auth.currentUser.email}</p>
+          <p><b>Department:</b> {user.department}</p>
+          <p><b>Employee ID:</b> {user.employeeId || "-"}</p>
+        </div>
 
-      <label>Contact Number:</label>
-      <input
-        type="text"
-        value={contact}
-        onChange={(e) => setContact(e.target.value)}
-        style={{ width: "100%", padding: 6, margin: "8px 0" }}
-      />
+        <div style={{ marginBottom: 20 }}>
+          <label style={{ display: "block", marginBottom: 8 }}><b>Contact Number:</b></label>
+          <input
+            type="text"
+            value={contact}
+            onChange={(e) => setContact(e.target.value)}
+            style={{ width: "100%", padding: 10, borderRadius: 4, border: "1px solid #ccc", boxSizing: "border-box" }}
+          />
+        </div>
 
-      <button onClick={updateProfile} disabled={loading} style={{ marginRight: 10 }}>
-        {loading ? "Updating..." : "Update"}
-      </button>
-      <button onClick={logout} disabled={loading} style={{ marginRight: 10 }}>
-        Logout
-      </button>
-      <button onClick={deleteAccount} disabled={loading} style={{ color: "red" }}>
-        Delete Account
-      </button>
+        <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
+          <button 
+            onClick={updateProfile} 
+            disabled={loading} 
+            style={{ padding: 10, cursor: "pointer", backgroundColor: "#1976d2", color: "#fff", border: "none", borderRadius: 4, fontWeight: "bold" }}
+          >
+            {loading ? "Updating..." : "Update Profile"}
+          </button>
+          <button 
+            onClick={logout} 
+            disabled={loading}
+            style={{ padding: 10, cursor: "pointer", backgroundColor: "#f5f5f5", border: "1px solid #ccc", borderRadius: 4, fontWeight: "bold" }}
+          >
+            Logout
+          </button>
+          <button 
+            onClick={deleteAccount} 
+            disabled={loading} 
+            style={{ padding: 10, cursor: "pointer", backgroundColor: "transparent", color: "#d32f2f", border: "none", fontWeight: "bold", fontSize: "0.9rem" }}
+          >
+            Delete Account
+          </button>
+        </div>
+      </div>
     </div>
   );
 }
