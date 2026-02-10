@@ -38,6 +38,7 @@ export default function Navbar({ role }) {
           <>
             <li><Link to="/admin/dashboard">Dashboard</Link></li>
             <li><Link to="/admin/college-settings">College Settings</Link></li>
+            <li><Link to="/admin/holidays">Holidays</Link></li>
             <li><Link to="/admin/teachers">Teachers</Link></li>
             <li><Link to="/admin/attendance">Attendance Records</Link></li>
             <li><Link to="/admin/export">Export</Link></li>
