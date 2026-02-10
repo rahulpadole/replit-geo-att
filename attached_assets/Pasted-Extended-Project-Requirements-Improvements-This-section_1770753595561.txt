@@ -1,0 +1,234 @@
+Extended Project Requirements & Improvements
+
+This section describes additional required features, corrections, and enhancements for the Geo-Location Based Attendance System to make it complete, usable, and production-ready.
+
+1️⃣ Teacher Management Enhancements
+➕ Add Teacher Page (Admin)
+
+When adding a teacher, the following mandatory details must be collected:
+
+Full Name
+
+Email Address
+
+Department
+
+Employee ID (Unique)
+
+Password (Initial login password)
+
+Phone Number
+
+Designation
+
+Date of Joining
+
+Active / Inactive Status
+
+Improvements:
+
+Validate unique Email & Employee ID
+
+Auto-create Firebase Auth account
+
+Store profile in Firestore
+
+Allow admin to edit or deactivate teacher
+
+2️⃣ Admin Management (NEW FEATURE)
+➕ Add Admin Page
+
+Admins should be managed just like teachers.
+
+Admin Details:
+
+Name
+
+Email
+
+Position / Role
+
+Admin ID
+
+Phone Number
+
+Password
+
+Active Status
+
+Permissions:
+
+Only Super Admin can add/remove other admins
+
+Role-based privileges (future scope)
+
+3️⃣ Profile Pages (Admin & Teacher)
+👤 Teacher Profile
+
+View personal details
+
+Department & Employee ID
+
+Change password
+
+Account status
+
+👤 Admin Profile
+
+Name
+
+Position
+
+Admin ID
+
+Contact details
+
+Change password
+
+✔ Change Password option must exist for both roles
+
+4️⃣ Admin Activity Logs (Audit Logs)
+🧾 Admin Logs Page
+
+The system must record all admin activities, including:
+
+Adding a teacher
+
+Editing teacher details
+
+Removing / deactivating teacher
+
+Adding or removing an admin
+
+Updating college location
+
+Adding holidays or special working days
+
+Log Structure:
+
+Admin Name / ID
+
+Action performed
+
+Target user (if any)
+
+Timestamp
+
+This improves accountability and security.
+
+5️⃣ Holiday & Special Working Day Management
+📅 Holiday Management (Admin)
+
+Add official holidays
+
+Mark dates as non-working
+
+Attendance disabled automatically on holidays
+
+⭐ Special Working Days
+
+Sometimes attendance is required on:
+
+Sundays
+
+Public holidays
+
+Special events
+
+Feature Required:
+
+Admin can mark a holiday as a working day
+
+Attendance enabled only for those marked days
+
+This ensures flexibility in academic schedules.
+
+6️⃣ Attendance Logic Improvements
+
+Attendance should be disabled automatically on:
+
+Holidays
+
+Non-working days
+
+Attendance allowed only on:
+
+Regular working days
+
+Special working days
+
+Prevent:
+
+Multiple IN entries in a day
+
+OUT without IN
+
+Late marking logic must be consistent
+
+7️⃣ Export Feature Fixes
+📤 Export Attendance (Admin)
+
+Current export is not working properly.
+
+Required Improvements:
+
+Correct date filtering
+
+Proper CSV / Excel formatting
+
+Include:
+
+Teacher name
+
+Employee ID
+
+Date
+
+IN / OUT time
+
+Status
+
+Support:
+
+Date range export
+
+Department-wise export
+
+8️⃣ Navigation & Usability Improvements
+🔙 Back Button (UX Improvement)
+
+Back button must be added where required:
+
+Add Teacher
+
+Add Admin
+
+Settings pages
+
+Forms and detail pages
+
+This improves user experience and navigation flow.
+
+9️⃣ Additional UI / UX Improvements
+
+Consistent page headers
+
+Breadcrumb navigation (optional)
+
+Confirmation dialogs before delete
+
+Loading indicators
+
+Toast notifications instead of alerts
+
+Mobile-friendly layout
+
+🔐 Security & Validation Improvements
+
+Strong password policy
+
+Role-based route protection
+
+Firestore security rules enforcement
+
+Prevent unauthorized access to admin features
