@@ -44,13 +44,13 @@ export default function Export() {
 
     const cleanData = records.map(r => ({
       Date: r.date,
-      Teacher: r.userName || r.userId,
-      InTime: r.inTime?.toDate ? r.inTime.toDate().toLocaleTimeString() : (r.inTime || ""),
-      OutTime: r.outTime?.toDate ? r.outTime.toDate().toLocaleTimeString() : (r.outTime || ""),
-      Status: r.status || "",
-      LateReason: r.lateReason || "",
-      InDistance: r.inLocation ? `${r.inLocation.distance.toFixed(1)}m` : "",
-      OutDistance: r.outLocation ? `${r.outLocation.distance.toFixed(1)}m` : "",
+      Teacher: r.userName || r.userId || "Unknown",
+      InTime: r.inTime?.toDate ? r.inTime.toDate().toLocaleTimeString() : (r.inTime || "-"),
+      OutTime: r.outTime?.toDate ? r.outTime.toDate().toLocaleTimeString() : (r.outTime || "-"),
+      Status: r.status || "Present",
+      LateReason: r.lateReason || "-",
+      InDistance: r.inLocation?.distance ? `${r.inLocation.distance.toFixed(1)}m` : "-",
+      OutDistance: r.outLocation?.distance ? `${r.outLocation.distance.toFixed(1)}m` : "-",
     }));
 
     const ws = XLSX.utils.json_to_sheet(cleanData);

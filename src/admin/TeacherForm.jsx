@@ -9,6 +9,8 @@ export default function TeacherForm() {
 
   const [name, setName] = useState("");
   const [department, setDepartment] = useState("");
+  const [employeeId, setEmployeeId] = useState("");
+  const [phone, setPhone] = useState("");
   const [loading, setLoading] = useState(false);
 
   // Load teacher when editing
@@ -27,6 +29,8 @@ export default function TeacherForm() {
         const data = snap.data();
         setName(data.name || "");
         setDepartment(data.department || "");
+        setEmployeeId(data.employeeId || "");
+        setPhone(data.phone || "");
       } catch (err) {
         console.error(err);
         alert("Failed to load teacher");
@@ -47,18 +51,21 @@ export default function TeacherForm() {
 
     setLoading(true);
     try {
+      const teacherData = {
+        name: name.trim(),
+        department: department.trim(),
+        employeeId: employeeId.trim(),
+        phone: phone.trim(),
+      };
+
       if (id) {
         // Update
-        await updateDoc(doc(db, "users", id), {
-          name: name.trim(),
-          department: department.trim(),
-        });
+        await updateDoc(doc(db, "users", id), teacherData);
         alert("✅ Teacher updated");
       } else {
         // Create
         await addDoc(collection(db, "users"), {
-          name: name.trim(),
-          department: department.trim(),
+          ...teacherData,
           role: "teacher",
           active: true,
           createdAt: new Date(),
@@ -91,12 +98,34 @@ export default function TeacherForm() {
       </div>
 
       <div style={{ marginBottom: 12 }}>
+        <label>Employee ID</label>
+        <input
+          type="text"
+          value={employeeId}
+          onChange={(e) => setEmployeeId(e.target.value)}
+          placeholder="EMP001"
+          style={{ width: "100%", padding: 8 }}
+        />
+      </div>
+
+      <div style={{ marginBottom: 12 }}>
         <label>Department</label>
         <input
           type="text"
           value={department}
           onChange={(e) => setDepartment(e.target.value)}
           placeholder="Department"
+          style={{ width: "100%", padding: 8 }}
+        />
+      </div>
+
+      <div style={{ marginBottom: 12 }}>
+        <label>Phone Number</label>
+        <input
+          type="text"
+          value={phone}
+          onChange={(e) => setPhone(e.target.value)}
+          placeholder="Phone Number"
           style={{ width: "100%", padding: 8 }}
         />
       </div>

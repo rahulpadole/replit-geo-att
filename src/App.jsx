@@ -25,6 +25,7 @@ import Timetable from "./admin/Timetable";
 import CollegeSettings from "./admin/CollegeSettings";
 import Teachers from "./admin/Teachers";
 import TeacherForm from "./admin/TeacherForm";
+import Holidays from "./admin/Holidays";
 import AdminAttendance from "./admin/Attendance";
 import Export from "./admin/Export";
 import AuditLogs from "./admin/AuditLogs";
@@ -168,6 +169,17 @@ function App() {
             <AdminRoute>
               <AdminLayout>
                 <TeacherForm />
+              </AdminLayout>
+            </AdminRoute>
+          }
+        />
+
+        <Route
+          path="/admin/holidays"
+          element={
+            <AdminRoute>
+              <AdminLayout>
+                <Holidays />
               </AdminLayout>
             </AdminRoute>
           }
