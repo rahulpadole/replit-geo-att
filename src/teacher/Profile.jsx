@@ -1,16 +1,35 @@
 import { useEffect, useState } from "react";
 import { auth, db } from "../services/firebase";
 import { doc, getDoc, updateDoc } from "firebase/firestore";
-import { signOut, deleteUser } from "firebase/auth";
+import { signOut, deleteUser, updatePassword } from "firebase/auth";
 import { useNavigate } from "react-router-dom";
 
 export default function TeacherProfile() {
   const navigate = useNavigate();
   const [user, setUser] = useState(null);
   const [contact, setContact] = useState("");
+  const [newPassword, setNewPassword] = useState("");
   const [loading, setLoading] = useState(false);
 
   const uid = auth.currentUser.uid;
+
+  useEffect(() => {
+    // ... load profile code already there
+  }, [uid]);
+
+  const changePassword = async () => {
+    if (newPassword.length < 6) return alert("Password must be at least 6 characters");
+    try {
+      setLoading(true);
+      await updatePassword(auth.currentUser, newPassword);
+      alert("✅ Password updated successfully");
+      setNewPassword("");
+    } catch (err) {
+      alert("❌ Error: " + err.message);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   useEffect(() => {
     const loadProfile = async () => {
@@ -105,7 +124,25 @@ export default function TeacherProfile() {
           />
         </div>
 
-        <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
+        <div style={{ borderTop: "1px solid #eee", marginTop: 20, paddingTop: 20 }}>
+          <h3>Change Password</h3>
+          <input
+            type="password"
+            placeholder="New Password"
+            value={newPassword}
+            onChange={(e) => setNewPassword(e.target.value)}
+            style={{ width: "100%", padding: 10, marginBottom: 10, borderRadius: 4, border: "1px solid #ccc" }}
+          />
+          <button 
+            onClick={changePassword} 
+            disabled={loading}
+            style={{ padding: 10, cursor: "pointer", backgroundColor: "#2e7d32", color: "#fff", border: "none", borderRadius: 4, width: "100%" }}
+          >
+            Update Password
+          </button>
+        </div>
+
+        <div style={{ display: "flex", flexDirection: "column", gap: 10, marginTop: 20 }}>
           <button 
             onClick={updateProfile} 
             disabled={loading} 

@@ -1,7 +1,8 @@
 import { useEffect, useState } from "react";
 import { collection, getDocs, deleteDoc, doc } from "firebase/firestore";
-import { db } from "../services/firebase";
+import { db, auth } from "../services/firebase";
 import { Link, useNavigate } from "react-router-dom";
+import { logAdminAction } from "../utils/logger";
 
 export default function Teachers() {
   const navigate = useNavigate();
@@ -30,10 +31,11 @@ export default function Teachers() {
   }, []);
 
   // Delete teacher
-  const removeTeacher = async (id) => {
+  const removeTeacher = async (id, teacherName) => {
     if (!window.confirm("Are you sure you want to delete this teacher?")) return;
     try {
       await deleteDoc(doc(db, "users", id));
+      await logAdminAction(auth.currentUser?.email || "Admin", "Deleted Teacher", teacherName);
       setTeachers((prev) => prev.filter((t) => t.id !== id));
       alert("Teacher deleted ✅");
     } catch (err) {
@@ -84,7 +86,7 @@ export default function Teachers() {
                     <Link to={`/admin/teachers/edit/${t.id}`}>
                       <button style={{ marginRight: 8, padding: "4px 8px" }}>✏️ Edit</button>
                     </Link>{" "}
-                    <button onClick={() => removeTeacher(t.id)} style={{ backgroundColor: "#d32f2f", color: "#fff", border: "none", padding: "4px 8px", cursor: "pointer" }}>🗑️ Delete</button>
+                    <button onClick={() => removeTeacher(t.id, t.name)} style={{ backgroundColor: "#d32f2f", color: "#fff", border: "none", padding: "4px 8px", cursor: "pointer" }}>🗑️ Delete</button>
                   </td>
                 </tr>
               ))}

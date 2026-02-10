@@ -1,7 +1,8 @@
 import { useState, useEffect } from "react";
-import { db } from "../services/firebase";
+import { db, auth } from "../services/firebase";
 import { collection, addDoc, getDocs, deleteDoc, doc, query, orderBy } from "firebase/firestore";
 import { useNavigate } from "react-router-dom";
+import { logAdminAction } from "../utils/logger";
 
 export default function Holidays() {
   const navigate = useNavigate();
@@ -27,6 +28,7 @@ export default function Holidays() {
     setLoading(true);
     try {
       await addDoc(collection(db, "holidays"), { name, date, isSpecialEvent });
+      await logAdminAction(auth.currentUser?.email || "Admin", isSpecialEvent ? "Added Special Working Day" : "Added Holiday", name);
       setName("");
       setDate("");
       setIsSpecialEvent(false);
@@ -38,9 +40,10 @@ export default function Holidays() {
     }
   };
 
-  const deleteHoliday = async (id) => {
+  const deleteHoliday = async (id, holidayName) => {
     if (!window.confirm("Delete this entry?")) return;
     await deleteDoc(doc(db, "holidays", id));
+    await logAdminAction(auth.currentUser?.email || "Admin", "Deleted Holiday/Event", holidayName);
     fetchHolidays();
   };
 
@@ -88,7 +91,7 @@ export default function Holidays() {
               <td>{h.date}</td>
               <td>{h.name}</td>
               <td>{h.isSpecialEvent ? "Working Day" : "Holiday"}</td>
-              <td><button onClick={() => deleteHoliday(h.id)}>Delete</button></td>
+              <td><button onClick={() => deleteHoliday(h.id, h.name)}>Delete</button></td>
             </tr>
           ))}
         </tbody>

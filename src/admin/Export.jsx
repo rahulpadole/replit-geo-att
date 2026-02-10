@@ -11,19 +11,19 @@ export default function Export() {
   const [loading, setLoading] = useState(false);
   const [fromDate, setFromDate] = useState("");
   const [toDate, setToDate] = useState("");
+  const [deptFilter, setDeptFilter] = useState("");
   
-  // Initialize the navigate function
   const navigate = useNavigate();
 
   const loadAttendance = async () => {
     if (!fromDate || !toDate) {
-      alert("Please select both From and To dates");
+      alert("Please select date range");
       return;
     }
 
     setLoading(true);
     try {
-      const q = query(
+      let q = query(
         collection(db, "attendance"),
         where("date", ">=", fromDate),
         where("date", "<=", toDate),
@@ -31,10 +31,16 @@ export default function Export() {
       );
 
       const snap = await getDocs(q);
-      setRecords(snap.docs.map(d => ({ id: d.id, ...d.data() })));
+      let list = snap.docs.map(d => ({ id: d.id, ...d.data() }));
+      
+      if (deptFilter) {
+        list = list.filter(r => r.department === deptFilter);
+      }
+      
+      setRecords(list);
     } catch (err) {
       console.error(err);
-      alert("Error fetching attendance: " + err.message);
+      alert("Error: " + err.message);
     } finally {
       setLoading(false);
     }
@@ -113,6 +119,16 @@ export default function Export() {
             value={toDate}
             onChange={(e) => setToDate(e.target.value)}
           />
+        </label>{" "}
+        <label>
+          Department:{" "}
+          <select value={deptFilter} onChange={(e) => setDeptFilter(e.target.value)}>
+            <option value="">All Departments</option>
+            <option value="CS">Computer Science</option>
+            <option value="IT">Information Technology</option>
+            <option value="ME">Mechanical</option>
+            <option value="EE">Electrical</option>
+          </select>
         </label>{" "}
         <button onClick={loadAttendance} disabled={loading}>
           {loading ? "Loading..." : "Load Records"}
